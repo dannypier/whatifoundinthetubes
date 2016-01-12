@@ -1,0 +1,219 @@
+{
+	"id": "c0b40fa0-abc4-6a84-0bf9-584cbbf34cb4",
+	"name": "whatifoundinthetubes",
+	"description": "",
+	"order": [],
+	"folders": [
+		{
+			"id": "03e55254-592a-e2b2-2d03-67a88692db40",
+			"name": "Comments",
+			"description": "",
+			"order": [
+				"faafbc7d-70ad-ec31-020d-b09184defbf7",
+				"1936d2b5-0eb5-09be-27b0-304e206f56fc",
+				"ebf14c7c-0631-2419-5a72-12ea356e0e78"
+			],
+			"owner": "274438"
+		},
+		{
+			"id": "670cb718-58a9-80fd-b31a-34a8c1767330",
+			"name": "Posts",
+			"description": "",
+			"order": [
+				"3abf84c7-87ab-3201-e7c1-68af14f4d5a5",
+				"47b15e8e-88bd-8939-b21c-55c8bcf0e6b9",
+				"cc32982b-5ca7-a39f-e1cf-cdf5bb655c0f",
+				"bce1ceba-e3e2-effb-fe8b-a3bfdc1995ca"
+			],
+			"owner": "274438"
+		}
+	],
+	"timestamp": 1452551217362,
+	"owner": "274438",
+	"remoteLink": "https://www.getpostman.com/collections/b97e9f3e116f96543572",
+	"public": false,
+	"requests": [
+		{
+			"id": "1936d2b5-0eb5-09be-27b0-304e206f56fc",
+			"headers": "",
+			"url": "http://localhost:3000/posts/:post/comments/:comment/upvote",
+			"preRequestScript": "",
+			"pathVariables": {
+				"post": "56942d18c731c26d71072d18",
+				"comment": "5694417f92e26e68729fe65b"
+			},
+			"method": "PUT",
+			"data": [],
+			"dataMode": "params",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1452557654994,
+			"name": "Upvote Comment",
+			"description": "Upvotes a comment by post and comment id",
+			"collectionId": "c0b40fa0-abc4-6a84-0bf9-584cbbf34cb4",
+			"responses": []
+		},
+		{
+			"id": "3abf84c7-87ab-3201-e7c1-68af14f4d5a5",
+			"headers": "",
+			"url": "localhost:3000/posts",
+			"pathVariables": {},
+			"preRequestScript": "",
+			"method": "GET",
+			"collectionId": "c0b40fa0-abc4-6a84-0bf9-584cbbf34cb4",
+			"data": [],
+			"dataMode": "params",
+			"name": "All Posts",
+			"description": "returns all posts",
+			"descriptionFormat": "html",
+			"time": 1452551273756,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"folder": "670cb718-58a9-80fd-b31a-34a8c1767330"
+		},
+		{
+			"id": "47b15e8e-88bd-8939-b21c-55c8bcf0e6b9",
+			"headers": "",
+			"url": "localhost:3000/posts",
+			"preRequestScript": "",
+			"pathVariables": {},
+			"method": "POST",
+			"data": [
+				{
+					"key": "title",
+					"value": "postmantest",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "link",
+					"value": "http://postmantest.com",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "urlencoded",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1452551453674,
+			"name": "New Post",
+			"description": "creates a new post from postman and returns the result",
+			"collectionId": "c0b40fa0-abc4-6a84-0bf9-584cbbf34cb4",
+			"responses": [],
+			"folder": "670cb718-58a9-80fd-b31a-34a8c1767330"
+		},
+		{
+			"id": "bce1ceba-e3e2-effb-fe8b-a3bfdc1995ca",
+			"headers": "",
+			"url": "http://localhost:3000/posts/:post/upvote",
+			"preRequestScript": "",
+			"pathVariables": {
+				"post": "56943c5cb2bd7536725c2f64"
+			},
+			"method": "PUT",
+			"data": [],
+			"dataMode": "params",
+			"version": 2,
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1452555971943,
+			"name": "Upvote Post",
+			"description": "Upvotes a post by id",
+			"collectionId": "c0b40fa0-abc4-6a84-0bf9-584cbbf34cb4",
+			"responses": [],
+			"folder": "670cb718-58a9-80fd-b31a-34a8c1767330"
+		},
+		{
+			"id": "cc32982b-5ca7-a39f-e1cf-cdf5bb655c0f",
+			"headers": "",
+			"url": "localhost:3000/posts/:post",
+			"pathVariables": {
+				"post": "56942d18c731c26d71072d18"
+			},
+			"preRequestScript": "",
+			"method": "GET",
+			"collectionId": "c0b40fa0-abc4-6a84-0bf9-584cbbf34cb4",
+			"data": [],
+			"dataMode": "params",
+			"name": "Post by Id",
+			"description": "Returns a single post by id",
+			"descriptionFormat": "html",
+			"time": 1452554955573,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"folder": "670cb718-58a9-80fd-b31a-34a8c1767330"
+		},
+		{
+			"id": "ebf14c7c-0631-2419-5a72-12ea356e0e78",
+			"headers": "",
+			"url": "localhost:3000/posts/:post/comments",
+			"pathVariables": {
+				"post": "56942d18c731c26d71072d18"
+			},
+			"preRequestScript": "",
+			"method": "GET",
+			"collectionId": "c0b40fa0-abc4-6a84-0bf9-584cbbf34cb4",
+			"data": [],
+			"dataMode": "urlencoded",
+			"name": "All Comments for a Post",
+			"description": "All comments for a post",
+			"descriptionFormat": "html",
+			"time": 1452557543578,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"folder": "03e55254-592a-e2b2-2d03-67a88692db40"
+		},
+		{
+			"id": "faafbc7d-70ad-ec31-020d-b09184defbf7",
+			"headers": "",
+			"url": "localhost:3000/posts/:post/comments",
+			"pathVariables": {
+				"post": "56942d18c731c26d71072d18"
+			},
+			"preRequestScript": "",
+			"method": "POST",
+			"collectionId": "c0b40fa0-abc4-6a84-0bf9-584cbbf34cb4",
+			"data": [
+				{
+					"key": "body",
+					"value": "This is a comment",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "author",
+					"value": "Author",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "urlencoded",
+			"name": "New Comment for a Post",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1452556669537,
+			"version": 2,
+			"responses": [],
+			"tests": "",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"folder": "03e55254-592a-e2b2-2d03-67a88692db40",
+			"isFromCollection": true,
+			"collectionRequestId": "faafbc7d-70ad-ec31-020d-b09184defbf7"
+		}
+	]
+}
