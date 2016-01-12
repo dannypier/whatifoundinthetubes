@@ -4,49 +4,80 @@ angular.module('flapperNews', ['ui.router'])
         '$urlRouterProvider',
         function($stateProvider, $urlRouterProvider){
             $stateProvider.state('home', {
-                url: '/home',
-                templateUrl: '/home.html',
-                controller: 'MainCtrl'
-            })
+                    url: '/home',
+                    templateUrl: '/home.html',
+                    controller: 'MainCtrl',
+                    resolve: {
+                        postPromise: ['posts', function(posts){
+                            return posts.getAll();
+                        }]
+                    }
+                })
                 .state('posts', {
-                url: '/posts/{id}',
-                templateUrl: '/posts.html',
-                controller: 'PostsCtrl'
-            })
+                    url: '/posts/{id}',
+                    templateUrl: '/posts.html',
+                    controller: 'PostsCtrl',
+                    resolve :{
+                        post : ['$stateParams', 'posts', function($stateParams, posts){
+                            return posts.get($stateParams.id);
+                        }]
+                    }
+                })
 
             $urlRouterProvider.otherwise('home')
         }
     ])
-    .factory('posts', [function(){
-    var o = {
-        posts: [ ]
-    }
-    return o;
-}])
-.controller('MainCtrl', [
-    '$scope',
-    'posts',
-    function($scope, posts){
-        $scope.test = 'Hello world!';
-
-        $scope.posts = posts.posts;
-
-        $scope.addPost = function(){
-            if ($scope.title == '' || $scope.link == '') { return ;}
-            $scope.posts.push( {
-                title: $scope.title,
-                link: $scope.link,
-                upvotes:1,
-                comments: []
+    .factory('posts', ['$http', function($http){
+        var o = {
+            posts: [ ]
+        }
+        o.getAll = function(){
+            return $http.get('/posts').success(function(data){
+                angular.copy(data, o.posts);
             })
-            $scope.title=''
-            $scope.link=''
         }
 
-        $scope.incrementUpvotes = function(post){
-            post.upvotes += 1;
+        o.get = function(id){
+            return $http.get('/posts/' + id).success(function (data) {
+                return res.data;
+            })
         }
+
+        o.create = function(post){
+            return $http.post('/posts', post).success(function(data){
+                o.posts.push(data);
+            })
+        }
+
+        o.upvote = function(post){
+            return $http.put('/posts/' + post._id + '/upvote').success(function(data){
+                post.upvotes += 1;
+            })
+        }
+        return o;
     }])
+    .controller('MainCtrl', [
+        '$scope',
+        'posts',
+        function($scope, posts){
+            $scope.test = 'Hello world!';
+
+            $scope.posts = posts.posts;
+
+            $scope.addPost = function(){
+                if ($scope.title == '' || $scope.link == '') { return ;}
+                posts.create( {
+                    title: $scope.title,
+                    link: $scope.link
+                })
+                $scope.title=''
+                $scope.link=''
+            }
+
+            $scope.incrementUpvotes = function(post){
+                posts.upvote(post)
+            }
+        }])
     .controller('PostsCtrl', [
         '$scope',
         '$stateParams',
@@ -57,11 +88,11 @@ angular.module('flapperNews', ['ui.router'])
             $scope.addComment = function(){
                 if ($scope.body == '') { return ;}
                 $scope.post.comments.push(
-                        {
-                            author: '',
-                            body : $scope.body,
-                            upvotes: 1
-                        }
+                    {
+                        author: '',
+                        body : $scope.body,
+                        upvotes: 1
+                    }
                 );
                 $scope.body=''
 
