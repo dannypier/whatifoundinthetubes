@@ -27,7 +27,7 @@ angular.module('flapperNews', ['ui.router'])
             $urlRouterProvider.otherwise('home')
         }
     ])
-    .factory('posts', ['$http', function($http){
+    .factory('posts',  ['$http', function($http){
         var o = {
             posts: [ ]
         }
@@ -38,8 +38,8 @@ angular.module('flapperNews', ['ui.router'])
         }
 
         o.get = function(id){
-            return $http.get('/posts/' + id).success(function (data) {
-                return res.data;
+            return $http.get('/posts/' + id).then(function (res) {
+                return res.data
             })
         }
 
@@ -47,6 +47,10 @@ angular.module('flapperNews', ['ui.router'])
             return $http.post('/posts', post).success(function(data){
                 o.posts.push(data);
             })
+        }
+
+        o.addComment = function(id, comment){
+            return $http.post('/posts/' + id + '/comments', comment);
         }
 
         o.upvote = function(post){
@@ -80,22 +84,25 @@ angular.module('flapperNews', ['ui.router'])
         }])
     .controller('PostsCtrl', [
         '$scope',
-        '$stateParams',
         'posts',
-        function($scope, $stateParams, posts){
-            $scope.post = posts.posts[$stateParams.id];
+        'post',
+        function($scope, posts, post){
+            $scope.post = post
 
             $scope.addComment = function(){
-                if ($scope.body == '') { return ;}
-                $scope.post.comments.push(
-                    {
-                        author: '',
-                        body : $scope.body,
-                        upvotes: 1
-                    }
-                );
-                $scope.body=''
 
+                if ($scope.body == '') { return ;}
+
+                comment = {
+                    'body' : $scope.body,
+                    'author' : 'dp'
+                }
+
+                posts.addComment(post._id,comment).then(function(res) {
+                        $scope.post.comments.push(res.data)
+                    }
+                )
+                $scope.body =''
             }
         }
     ]);
