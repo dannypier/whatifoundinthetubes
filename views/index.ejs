@@ -33,7 +33,8 @@
             {{post.title}}
     </span>
         <span>
-            <a href="#/posts/{{post._id}}">Comments</a>
+            <span ng-show="post.comments.length > 0"><a href="#/posts/{{post._id}}">{{post.comments.length}} Comments</a></span>
+            <span ng-hide="post.comments.length > 0"><a href="#/posts/{{post._id}}">Comment</a></span>
         </span>
     </div>
 
@@ -69,7 +70,7 @@
     <span style="font-size:20px; margin-left:10px;">
         {{comment.upvotes}}
             <span class="glyphicon glyphicon-thumbs-up"
-                  ng-click="incrementUpvotes(comment)"></span>
+                  ng-click="incrementUpvotes(post,comment)"></span>
       {{comment.body}}
     </span>
         - by {{comment.author}}

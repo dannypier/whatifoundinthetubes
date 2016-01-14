@@ -58,6 +58,13 @@ angular.module('flapperNews', ['ui.router'])
                 post.upvotes += 1;
             })
         }
+
+        o.upvoteComment = function(postId, comment){
+            return $http.put('/posts/' + postId + '/comments/' + comment._id + '/upvote').success(function(data){
+                comment.upvotes += 1;
+            })
+        }
+
         return o;
     }])
     .controller('MainCtrl', [
@@ -103,6 +110,10 @@ angular.module('flapperNews', ['ui.router'])
                     }
                 )
                 $scope.body =''
+            }
+
+            $scope.incrementUpvotes = function(post, comment){
+                posts.upvoteComment(post._id,comment);
             }
         }
     ]);

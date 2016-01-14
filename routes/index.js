@@ -55,7 +55,6 @@ router.get('/posts/:post', function(req, res){
 router.put('/posts/:post/upvote', function(req,res,next){
     req.post.upvote(function(err,post){
         if (err) {return next(err); }
-
             res.json(post)
     });
 });
@@ -103,7 +102,6 @@ router.param('comment', function(req,res,next,id){
 router.put('/posts/:post/comments/:comment/upvote', function(req,res,next){
     req.comment.upvote(function(err,comment){
         if (err) {return next(err); }
-
         res.json(comment)
     });
 });
