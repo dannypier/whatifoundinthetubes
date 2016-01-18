@@ -79,9 +79,9 @@ angular.module('whatifoundinthetubes', ['ui.router'])
             if (auth.isLoggedIn()){
                 var token = auth.getToken();
                 var payload = JSON.parse($window.atob(token.split('.')[1]));
+                return payload.name;
             }
 
-            return payload.name;
         }
 
         auth.register = function(user){
@@ -104,7 +104,7 @@ angular.module('whatifoundinthetubes', ['ui.router'])
     }])
 
 
-    .factory('posts',  ['$http', function($http){
+    .factory('posts',  ['$http', 'auth', function($http){
         var o = {
             posts: [ ]
         }
@@ -121,23 +121,31 @@ angular.module('whatifoundinthetubes', ['ui.router'])
         }
 
         o.create = function(post){
-            return $http.post('/posts', post).success(function(data){
+            return $http.post('/posts', post, {
+                headers: {Authorization: 'Bearer '+auth.getToken()}
+            }).success(function(data){
                 o.posts.push(data);
             })
         }
 
         o.addComment = function(id, comment){
-            return $http.post('/posts/' + id + '/comments', comment);
+            return $http.post('/posts/' + id + '/comments', comment, {
+                headers: {Authorization: 'Bearer '+auth.getToken()}
+            });
         }
 
         o.upvote = function(post){
-            return $http.put('/posts/' + post._id + '/upvote').success(function(data){
+            return $http.put('/posts/' + post._id + '/upvote',null, {
+                headers: {Authorization: 'Bearer '+auth.getToken()}
+            }).success(function(data){
                 post.upvotes += 1;
             })
         }
 
         o.upvoteComment = function(postId, comment){
-            return $http.put('/posts/' + postId + '/comments/' + comment._id + '/upvote').success(function(data){
+            return $http.put('/posts/' + postId + '/comments/' + comment._id + '/upvote', null, {
+                headers: {Authorization: 'Bearer '+auth.getToken()}
+            }).success(function(data){
                 comment.upvotes += 1;
             })
         }
@@ -147,6 +155,7 @@ angular.module('whatifoundinthetubes', ['ui.router'])
     .controller('MainCtrl', [
         '$scope',
         'posts',
+        'auth',
         function($scope, posts){
             $scope.test = 'Hello world!';
 
@@ -170,6 +179,7 @@ angular.module('whatifoundinthetubes', ['ui.router'])
         '$scope',
         'posts',
         'post',
+        'auth',
         function($scope, posts, post){
             $scope.post = post
 
