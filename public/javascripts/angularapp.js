@@ -79,7 +79,7 @@ angular.module('whatifoundinthetubes', ['ui.router'])
             if (auth.isLoggedIn()){
                 var token = auth.getToken();
                 var payload = JSON.parse($window.atob(token.split('.')[1]));
-                return payload.name;
+                return payload.email;
             }
 
         }
@@ -104,7 +104,7 @@ angular.module('whatifoundinthetubes', ['ui.router'])
     }])
 
 
-    .factory('posts',  ['$http', 'auth', function($http){
+    .factory('posts',  ['$http', 'auth', function($http, auth){
         var o = {
             posts: [ ]
         }
@@ -156,10 +156,9 @@ angular.module('whatifoundinthetubes', ['ui.router'])
         '$scope',
         'posts',
         'auth',
-        function($scope, posts){
-            $scope.test = 'Hello world!';
-
+        function($scope, posts, auth){
             $scope.posts = posts.posts;
+            $scope.isLoggedIn = auth.isLoggedIn;
 
             $scope.addPost = function(){
                 if ($scope.title == '' || $scope.link == '') { return ;}
@@ -180,8 +179,9 @@ angular.module('whatifoundinthetubes', ['ui.router'])
         'posts',
         'post',
         'auth',
-        function($scope, posts, post){
-            $scope.post = post
+        function($scope, posts, post, auth){
+            $scope.post = post;
+            $scope.isLoggedIn = auth.isLoggedIn;
 
             $scope.addComment = function(){
 

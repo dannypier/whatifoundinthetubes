@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 var PostSchema = new mongoose.Schema({
     title: String,
     link: String,
+    author: String,
     upvotes: {type: Number, default: 1},
     comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }]
 });
