@@ -13,6 +13,7 @@ require('./models/Posts');
 require('./models/Comments');
 require('./models/Users');
 require('./config/passport');
+require('./slack/client');
 
 var routes = require('./routes/index');
 
