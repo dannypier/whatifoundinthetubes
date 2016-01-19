@@ -219,7 +219,7 @@ angular.module('whatifoundinthetubes', ['ui.router'])
                 });
             };
 
-            $scope.logIn = function(){
+            $scope.login = function(){
                 auth.login($scope.user).error(function(error){
                     $scope.error = error;
                 }).then(function(){
@@ -234,6 +234,6 @@ angular.module('whatifoundinthetubes', ['ui.router'])
         function($scope, auth){
             $scope.isLoggedIn = auth.isLoggedIn;
             $scope.currentUser = auth.currentUser;
-            $scope.logOut = auth.logOut;
+            $scope.logOut = auth.logout;
         }
     ]);
