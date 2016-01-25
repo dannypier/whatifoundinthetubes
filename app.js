@@ -12,10 +12,13 @@ mongoose.connect('mongodb://localhost/whatifoundinthetubes');
 require('./models/Posts');
 require('./models/Comments');
 require('./models/Users');
+require('./models/SlackMessages');
+require('./models/SlackReactions');
 require('./config/passport');
 require('./slack/client');
 
 var routes = require('./routes/index');
+var slackRoutes = require('./routes/slack.js');
 
 var app = express();
 
@@ -32,6 +35,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 
+app.use('/slack', slackRoutes);
 app.use('/', routes);
 
 // catch 404 and forward to error handler
