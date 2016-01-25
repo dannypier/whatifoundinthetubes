@@ -16,12 +16,30 @@ rtm.start();
 
 rtm.on('message', function handleRtmMessage(message) {
 
-    var linkSubmission = extractLink(message);
+        var previousMessage = message.previousMessage;
 
-    if (typeof linkSubmission !== 'undefined') {
-        console.log("Link Post:\n" + JSON.stringify(linkSubmission));
-    }
+        if (message.subtype !== 'undefined' && message.previousMessage != undefined){
 
+            if (message.subtype == 'message_deleted') {
+                console.log("Delete post with timestamp: " + previousMessage.ts);
+            } else {
+                if (message.subtype == 'message_changed') {
+                    console.log("Change post with timestamp: " + previousMessage.ts);
+                }
+                var linkSubmission = extractLink(message);
+                if (typeof linkSubmission !== 'undefined') {
+                    console.log("Link Post:\n" + JSON.stringify(linkSubmission));
+                }
+            }
+        }
+});
+
+rtm.on('reaction_added', function handleRtmReactionAdded(reaction){
+        console.log("Reaction added");
+});
+
+rtm.on('reaction_removed', function handleRtmReactionAdded(reaction){
+    console.log("Reaction removed");
 });
 
 
