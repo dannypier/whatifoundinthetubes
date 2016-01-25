@@ -18,14 +18,14 @@ rtm.on('message', function handleRtmMessage(message) {
 
     var linkSubmission = extractLink(message);
 
-    console.log("Link Post:\n" + JSON.stringify(linkSubmission));
+    if (typeof linkSubmission !== 'undefined') {
+        console.log("Link Post:\n" + JSON.stringify(linkSubmission));
+    }
 
 });
 
 
 function extractLink(message){
-
-    var linkPost = {};
 
     console.log('\n');
     console.log(message);
@@ -34,6 +34,8 @@ function extractLink(message){
     var messageText = message.message;
 
     if (typeof messageText !== 'undefined' && typeof messageText.attachments !== 'undefined'){
+
+        var linkPost = {};
 
         var attachment = messageText.attachments[0];
         var link = attachment.fromUrl;
