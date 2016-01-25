@@ -6,7 +6,7 @@
  */
 
 /* eslint no-console:0 */
-
+var request = require('request');
 var RtmClient = require('../node_modules/slack-client/lib/clients/rtm/client');
 
 var token = 'xoxp-3265307277-3265307281-18870919619-20124e0285';
@@ -16,26 +16,43 @@ rtm.start();
 
 rtm.on('message', function handleRtmMessage(message) {
 
-        var previousMessage = message.previousMessage;
+    var messageContents = message.message;
+    var previousMessage = message.previousMessage;
 
-        if (message.subtype !== 'undefined' && message.previousMessage != undefined){
+    if (message.subtype !== 'undefined' && message.previousMessage != undefined){
 
-            if (message.subtype == 'message_deleted') {
-                console.log("Delete post with timestamp: " + previousMessage.ts);
-            } else {
-                if (message.subtype == 'message_changed') {
-                    console.log("Change post with timestamp: " + previousMessage.ts);
-                }
-                var linkSubmission = extractLink(message);
-                if (typeof linkSubmission !== 'undefined') {
-                    console.log("Link Post:\n" + JSON.stringify(linkSubmission));
-                }
+        if (message.subtype == 'message_deleted') {
+            console.log("Delete post with timestamp: " + previousMessage.ts);
+        } else {
+            if (message.subtype == 'message_changed') {
+                console.log("Change post with timestamp: " + previousMessage.ts);
             }
+            console.log("Message:\n" + JSON.stringify(message) + "\n\n");
+
+            var url = 'http://localhost:3000/slack/messages'
+            var options = {
+                method: 'PUT',
+                body: messageContents,
+                json: true,
+                url: url
+            }
+
+            request(options,
+                function (error, response, body) {
+                    if (!error) {
+                        console.log("Body: " + body);
+                    } else {
+                        console.log("Error: " + error)
+                    }
+                }
+            );
+
         }
+    }
 });
 
 rtm.on('reaction_added', function handleRtmReactionAdded(reaction){
-        console.log("Reaction added");
+    console.log("Reaction added");
 });
 
 rtm.on('reaction_removed', function handleRtmReactionAdded(reaction){

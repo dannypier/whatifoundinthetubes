@@ -5,7 +5,6 @@ var mongoose = require('mongoose');
 
 var SlackMessagesSchema = new mongoose.Schema({
     text: String,
-    user: mongoose.Schema.Types.ObjectId,
     ts: String,
     channel: String,
     subtype: String,
@@ -15,6 +14,7 @@ var SlackMessagesSchema = new mongoose.Schema({
     linkText: String,
     linkThumbWidth: Number,
     linkThumbHeight: Number,
+    slackUserId: String,
     reactions: [{type: mongoose.Schema.Types.ObjectId, ref: 'SlackReactions'}]
 });
 

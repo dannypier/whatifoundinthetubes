@@ -14,34 +14,48 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/messages', function(req, res, next){
-    SlackMessage.find(function(err, posts) {
+    SlackMessage.find(function(err, messages) {
         if (err) { next (err); }
-        res.json(posts)
+        res.json(messages)
     })
 });
 
 router.put('/messages', function(req, res, next){
 
-    //var jsonBody = JSON.parse(req.body);
-    //res.send(req.body.text);
-
-    var attachment;
-    if (req.body.attachments !== 'undefined'){
-        attachment = req.body.attachments[0];
+    if (typeof req.body.attachments === 'undefined' || req.body.attachments.length == 0){
+        res.send("NO ATTACHMENTS");
+        return;
     }
 
-    var message = new SlackMessage(req.body);
-    message.linkTitle = attachment.title;
-    message.linkUrl = attachment.fromUrl;
-    message.linkText = attachment.text;
-    message.linkThumbWidth = attachment.thumbWidth;
-    message.linkThumbHeight = attachment.thumbHeight;
-    message.linkServiceName = attachment.serviceName;
+    var attachment = req.body.attachments[0];
 
-    message.save(function(err, message){
+    var update = {
+        text: req.body.text,
+        ts: req.body.ts,
+        channel: req.body.channel,
+        subtype: req.body.subtype,
+        slackUserId: req.body.user,
+        linkTitle: attachment.title,
+        linkUrl: attachment.fromUrl,
+        linkText: attachment.text,
+        linkServiceName: attachment.serviceName
+    }
+
+    if (typeof attachment.linkWidth !== 'undefined' && typeof  attachment.linkHeight !== 'undefined'){
+        update['linkThumbWidth'] = attachment.linkWidth;
+        update['linkThumbHeight'] = attachment.linkHeight;
+    }
+
+    if (typeof attachment.thumbWidth !== 'undefined' && typeof  attachment.thumbHeight !== 'undefined'){
+        update['linkThumbWidth'] = attachment.thumbWidth;
+        update['linkThumbHeight'] = attachment.thumbHeight;
+    }
+
+    var query = {'ts':req.body.ts, 'channel': req.body.channel};
+    SlackMessage.findOneAndUpdate(query, update, {upsert:true}, function(err, message){
         if (err) { return next(err); }
-        res.json(message);
-    })
+        return res.json(message);
+    });
 });
 
 module.exports = router;
