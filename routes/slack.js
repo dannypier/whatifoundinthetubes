@@ -9,8 +9,7 @@ var SlackMessage = mongoose.model('SlackMessage');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-    console.log("HIT A SLACK ROUTE")
-    res.send("YEAH");
+    res.render('slack', { title: 'Slack' });
 });
 
 router.get('/messages', function(req, res, next){
@@ -41,14 +40,15 @@ router.put('/messages', function(req, res, next){
         linkServiceName: attachment.serviceName
     }
 
-    if (typeof attachment.linkWidth !== 'undefined' && typeof  attachment.linkHeight !== 'undefined'){
-        update['linkThumbWidth'] = attachment.linkWidth;
-        update['linkThumbHeight'] = attachment.linkHeight;
-    }
-
-    if (typeof attachment.thumbWidth !== 'undefined' && typeof  attachment.thumbHeight !== 'undefined'){
+    if (typeof attachment.thumbUrl !== 'undefined'){
         update['linkThumbWidth'] = attachment.thumbWidth;
         update['linkThumbHeight'] = attachment.thumbHeight;
+        update['linkThumbUrl'] = attachment.thumbUrl;
+    }
+    else if (typeof attachment.imageUrl !== 'undefined'){
+        update['linkThumbWidth'] = attachment.imageWidth;
+        update['linkThumbHeight'] = attachment.imageHeight;
+        update['linkThumbUrl'] = attachment.imageUrl;
     }
 
     var query = {'ts':req.body.ts, 'channel': req.body.channel};

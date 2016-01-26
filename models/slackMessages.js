@@ -12,6 +12,7 @@ var SlackMessagesSchema = new mongoose.Schema({
     linkUrl: String,
     linkServiceName: String,
     linkText: String,
+    linkThumbUrl: String,
     linkThumbWidth: Number,
     linkThumbHeight: Number,
     slackUserId: String,
