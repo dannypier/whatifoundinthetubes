@@ -26,7 +26,8 @@ var User = mongoose.model('User');
 passport.use(new SlackStrategy({
     //TODO this needs to not be in the .js
         clientID: "3265307277.19649948192",
-        clientSecret: "e8edcbd10c0d1fa8227e9ed8b4300cdb"
+        clientSecret: "e8edcbd10c0d1fa8227e9ed8b4300cdb",
+        scope: 'identify channels:read channels:history reactions:read'
     },
     function(accessToken, refreshToken, profile, done) {
         User.findOrCreate({ SlackId: profile.id }, function (err, user) {

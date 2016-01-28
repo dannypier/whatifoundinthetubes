@@ -10,7 +10,8 @@ var UserSchema = new mongoose.Schema({
     photo: String,
     email: {type: String, lowercase: true, unique: true},
     hash: String,
-    salt: String
+    salt: String,
+    SlackId: String,
 });
 
 UserSchema.methods.setPassword = function(password){

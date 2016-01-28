@@ -117,6 +117,16 @@ router.put('/posts/:post/comments/:comment/upvote', auth, function(req,res,next)
 });
 
 /* USER */
+//TODO this should not be exposed
+router.get('/users', function(req, res, next){
+
+    User.find(function(err, users) {
+        if (err) { next (err); }
+
+        res.json(users)
+    })
+
+});
 
 router.post('/register', function(req, res, next){
     if(!req.body.email || !req.body.password){
