@@ -4,8 +4,23 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
+var passport = require('passport');
 
 var SlackMessage = mongoose.model('SlackMessage');
+
+/* AUTH */
+
+router.get('/auth',
+    passport.authorize('slack'));
+
+router.get('/auth/callback',
+    passport.authorize('slack', { failureRedirect: '/login' }),
+    function(req, res) {
+        // Successful authentication, redirect home.
+        res.redirect('/');
+    });
+
+
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
