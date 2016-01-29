@@ -27,11 +27,28 @@ passport.use(new SlackStrategy({
     //TODO this needs to not be in the .js
         clientID: "3265307277.19649948192",
         clientSecret: "e8edcbd10c0d1fa8227e9ed8b4300cdb",
-        scope: 'identify channels:read channels:history reactions:read'
+        scope: 'identify channels:read channels:history users:read reactions:read'
     },
     function(accessToken, refreshToken, profile, done) {
-        User.findOrCreate({ SlackId: profile.id }, function (err, user) {
+
+        var update = {
+            SlackId: profile.id
+        };
+
+        var query = {'SlackId' : profile.id};
+        User.findOneAndUpdate(query, update, {upsert:true}, function(err, user){
+            console.log("ERROR: " + err);
+            console.log("USER: " + user);
             return done(err, user);
         });
     }
 ));
+
+passport.serializeUser(function(user, done) {
+    done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+    done(null, user);
+});
+
