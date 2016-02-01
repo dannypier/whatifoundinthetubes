@@ -1,4 +1,6 @@
 var express = require('express');
+var session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -34,7 +36,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  secret: 'lorian',
+  store: new MongoStore({ mongooseConnection: mongoose.connection })
+}));
 app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/slack', slackRoutes);
 app.use('/', routes);

@@ -47,10 +47,14 @@ passport.use(new SlackStrategy({
 ));
 
 passport.serializeUser(function(user, done) {
-    done(null, user);
+    console.log("Serializing user:" + user.user_id)
+    done(null, user.id);
 });
 
 passport.deserializeUser(function(user, done) {
-    done(null, user);
+    SlackUser.findById(user, function (err, user){
+        console.log("Deserialized user: " + user);
+        done(err, user);
+    });
 });
 

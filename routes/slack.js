@@ -12,12 +12,12 @@ var SlackMessage = mongoose.model('SlackMessage');
 /* AUTH */
 
 router.get('/auth',
-    passport.authorize('slack'));
+    passport.authenticate('slack'));
 
 router.get('/auth/callback',
-    passport.authorize('slack', { failureRedirect: '/login' }),
+    passport.authenticate('slack', { failureRedirect: '/login' }),
     function(req, res) {
-        console.log("TEST");
+        console.log("Successfully authenticated");
         // Successful authentication, redirect home.
         res.redirect('/slack');
     });
@@ -86,5 +86,23 @@ router.get('/users', function(req, res, next){
     })
 
 });
+
+router.get('/user/me', function (req, res) {
+    if (req.user) {
+        res.json(req.user);
+    } else {
+        res.status(401)
+        res.send("No user session found")
+    }
+});
+
+
+function ensureAuthenticated (req, res, next) {
+    if (req.isAuthenticated()) {
+        console.log("User is authenticated");
+        return next();
+    }
+    res.redirect('/slack/auth');
+}
 
 module.exports = router;
