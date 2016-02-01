@@ -5,23 +5,8 @@
 var passport = require('passport')
 var SlackStrategy = require('passport-slack').Strategy;
 var mongoose = require('mongoose');
-var User = mongoose.model('User');
+var SlackUser = mongoose.model('SlackUser');
 
-/// /passport.use(new LocalStrategy(
-//    {usernameField: 'email'},
-//    function(username, password, done){
-//        User.findOne({ email: username }, function(err, user){
-//            if (err) { return done(err); }
-//            if (!user){
-//                return done(null, false, {message: 'Incorrect username.'});
-//            }
-//            if (!user.validPassword(password)){
-//                return done(null, false, { message: 'Incorrect password.'});
-//            }
-//            return done(null, user);
-//        })
-//    })
-//)
 
 passport.use(new SlackStrategy({
     //TODO this needs to not be in the .js
@@ -31,12 +16,29 @@ passport.use(new SlackStrategy({
     },
     function(accessToken, refreshToken, profile, done) {
 
+        console.log("Profile: " + JSON.stringify(profile))
+
+        var json = profile._json;
+
         var update = {
-            SlackId: profile.id
+            team: json.team,
+            user: json.user,
+            team_id: json.team_id,
+            user_id: json.user_id,
+            profile_image: json.info.user.profile.image_72,
+            profile_thumb: json.info.user.profile.image_32,
+            last_authenticated: new Date()
         };
 
-        var query = {'SlackId' : profile.id};
-        User.findOneAndUpdate(query, update, {upsert:true}, function(err, user){
+        var query = {'user_id' : profile.id};
+        SlackUser.find(query, function(err, user){
+
+            if (err){
+
+            }
+
+        });
+        SlackUser.findOneAndUpdate(query, update, {upsert:true, 'new':true }, function(err, user){
             console.log("ERROR: " + err);
             console.log("USER: " + user);
             return done(err, user);

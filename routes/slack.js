@@ -6,6 +6,7 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var passport = require('passport');
 
+var SlackUser = mongoose.model('SlackUser');
 var SlackMessage = mongoose.model('SlackMessage');
 
 /* AUTH */
@@ -72,6 +73,18 @@ router.put('/messages', function(req, res, next){
         if (err) { return next(err); }
         return res.json(message);
     });
+});
+
+/* USER */
+//TODO this should not be exposed
+router.get('/users', function(req, res, next){
+
+    SlackUser.find(function(err, users) {
+        if (err) { next (err); }
+
+        res.json(users)
+    })
+
 });
 
 module.exports = router;

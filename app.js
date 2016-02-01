@@ -12,6 +12,7 @@ mongoose.connect('mongodb://localhost/whatifoundinthetubes');
 require('./models/Posts');
 require('./models/Comments');
 require('./models/Users');
+require('./models/SlackUsers')
 require('./models/SlackMessages');
 require('./models/SlackReactions');
 require('./config/passport');
