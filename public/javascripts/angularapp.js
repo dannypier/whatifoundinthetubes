@@ -232,7 +232,7 @@ angular.module('whatifoundinthetubes', ['ui.router'])
         '$scope',
         'auth',
         function($scope, auth){
-            $scope.isLoggedIn = auth.isLoggedIn;
+            $scope.isLoggedIn = true;
             $scope.currentUser = auth.currentUser;
             $scope.logOut = auth.logout;
         }

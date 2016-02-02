@@ -52,7 +52,7 @@ angular.module('grayze', ['ui.router'])
         }
     ])
 
-    .factory('auth', ['$http', '$window', function($http, $window){
+    .factory('auth', ['$http', '$window', '$q', function($http, $window, $q, $timeout){
         var auth = {};
 
         auth.saveToken = function(token){
@@ -65,27 +65,31 @@ angular.module('grayze', ['ui.router'])
             return $window.localStorage['whatifoundinthetubes-token'];
         }
 
-        auth.isLoggedIn = function(){
-            var token = auth.getToken();
+        auth.isLoggedIn = function() {
+            var deferred = $q.defer();
 
-            if (token){
-                var payload = JSON.parse($window.atob(token.split('.')[1]));
+            $http.get('/slack/loggedin').then(function(res){
+                deferred.resolve(res.data)
+            }, function(res) {
+                deferred.reject(res)
+            });
 
-                return payload.exp > Date.now() / 1000;
-            }
-            else {
-                return false;
-            }
+            return deferred.promise;
         }
 
-        auth.currentUser = function(){
-            if (auth.isLoggedIn()){
-                var token = auth.getToken();
-                var payload = JSON.parse($window.atob(token.split('.')[1]));
-                return payload.email;
-            }
+        auth.currentUser = function() {
+            var deferred = $q.defer();
 
-        }
+            $http.get('/slack/users/me').then(function(res){
+                deferred.resolve(res.data)
+            }, function(data) {
+                deferred.reject(res)
+            });
+
+            return deferred.promise;
+        };
+
+
 
         auth.register = function(user){
             return $http.post('/register', user).success(function(data){
@@ -191,8 +195,28 @@ angular.module('grayze', ['ui.router'])
         '$scope',
         'auth',
         function($scope, auth){
-            $scope.isLoggedIn = auth.isLoggedIn;
-            $scope.currentUser = auth.currentUser;
+
+            $scope.currentUser = "NONE"
+            $scope.isLoggedIn = false;
+
+            auth.currentUser().then(function(data) {
+                console.log("USER: " + data);
+                $scope.currentUser = data;
+            });
+
+            auth.isLoggedIn().then(function(data){
+
+                console.log("data " + data.user_id);
+
+                if (typeof(data._id) != 'undefined'){
+                    console.log("Defined: " + data._id);
+                    $scope.isLoggedIn = true;
+                } else {
+                    console.log("Undefined: " + data);
+                    $scope.isLoggedIn = false;
+                }
+            });
+
             $scope.logOut = auth.logout;
         }
     ]);

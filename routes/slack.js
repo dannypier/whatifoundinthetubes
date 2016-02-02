@@ -87,12 +87,22 @@ router.get('/users', function(req, res, next){
 
 });
 
-router.get('/user/me', function (req, res) {
-    if (req.user) {
-        res.json(req.user);
+router.get('/loggedin', function(req, res) {
+    if (req.isAuthenticated()){
+        var user = req.user;
+        console.log("USER: " + user)
+        res.send(user)
     } else {
-        res.status(401)
-        res.send("No user session found")
+        res.send({ err: "No user session found "})
+    }
+});
+
+router.get('/users/me', function (req, res) {
+    if (true) {
+        console.log("User found")
+        return res.json(req.user);
+    } else {
+        return res.status(401).json({err: "No user session found"});
     }
 });
 
