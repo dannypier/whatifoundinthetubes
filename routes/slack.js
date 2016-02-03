@@ -115,4 +115,24 @@ function ensureAuthenticated (req, res, next) {
     res.redirect('/slack/auth');
 }
 
+/* SLACK API */
+
+var WebClient = require('../node_modules/slack-client/lib/clients/web/client');
+
+router.get('/channels', function(req, res){
+
+    console.log("ACCESS TOKEN: " + req.user.access_token);
+
+    var web = new WebClient(req.user.access_token);
+
+    web.channels.list(null, function channels(err, channels) {
+        if (err) return console.log('Error:', err);
+        console.log('Channel Info:', channels);
+    });
+
+})
+
+var token = process.env.SLACK_API_TOKEN || '';
+
+
 module.exports = router;

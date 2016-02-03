@@ -77,6 +77,18 @@ angular.module('grayze', ['ui.router'])
             return deferred.promise;
         }
 
+        auth.channels = function() {
+            var deferred = $q.defer();
+
+            $http.get('/slack/channels').then(function(res){
+                deferred.resolve(res.data)
+            }, function(res) {
+                deferred.reject(res)
+            });
+
+            return deferred.promise;
+        }
+
         auth.currentUser = function() {
             var deferred = $q.defer();
 
@@ -215,6 +227,11 @@ angular.module('grayze', ['ui.router'])
                     console.log("Undefined: " + data);
                     $scope.isLoggedIn = false;
                 }
+            });
+
+            auth.channels().then(function(data){
+
+                console.log("channels " + data);
             });
 
             $scope.logOut = auth.logout;

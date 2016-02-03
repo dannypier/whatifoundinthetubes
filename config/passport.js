@@ -23,6 +23,7 @@ passport.use(new SlackStrategy({
         var update = {
             team: json.team,
             user: json.user,
+            access_token: accessToken,
             team_id: json.team_id,
             user_id: json.user_id,
             profile_image: json.info.user.profile.image_72,

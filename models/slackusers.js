@@ -4,6 +4,7 @@
 var mongoose = require('mongoose');
 
 var SlackUserSchema = new mongoose.Schema({
+    access_token: String,
     team: String,
     user: String,
     team_id: String,
