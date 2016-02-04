@@ -148,6 +148,11 @@ angular.module('grayze', ['ui.router'])
         function($scope, posts, auth){
             $scope.posts = posts.posts;
             $scope.isLoggedIn = auth.isLoggedIn;
+
+            auth.channels().then(function(data){
+                $scope.channels = data.channels;
+                console.log("CHANNELS: " + $scope.channels)
+            });
         }])
     .controller('PostsCtrl', [
         '$scope',
@@ -227,11 +232,6 @@ angular.module('grayze', ['ui.router'])
                     console.log("Undefined: " + data);
                     $scope.isLoggedIn = false;
                 }
-            });
-
-            auth.channels().then(function(data){
-
-                console.log("channels " + data);
             });
 
             $scope.logOut = auth.logout;

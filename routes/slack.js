@@ -127,7 +127,8 @@ router.get('/channels', function(req, res){
 
     web.channels.list(null, function channels(err, channels) {
         if (err) return console.log('Error:', err);
-        console.log('Channel Info:', channels);
+        console.log(channels)
+        res.json(channels);
     });
 
 })
